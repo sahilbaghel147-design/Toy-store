@@ -3,85 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khilonon Ki Duniya - Toy Store</title>
+    <title>ToyMart - Online Khilonon Ki Sabse Badi Dukaan</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header>
-        <h1>Khilonon Ki Duniya</h1>
-        <nav>
+        <div class="top-bar">
+            <p>🚚 Free Delivery on orders above ₹1000!</p>
+        </div>
+        <div class="main-header">
+            <div class="logo">
+                <h1>ToyMart</h1>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search for toys, brands, or categories...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <nav class="nav-icons">
+                <a href="#"><i class="fas fa-user"></i> Account</a>
+                <a href="#"><i class="fas fa-heart"></i> Wishlist</a>
+                <a href="#" class="cart-btn"><i class="fas fa-shopping-cart"></i> Cart (0)</a>
+            </nav>
+        </div>
+        <nav class="main-nav">
             <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#products">Khilone</a></li>
-                <li><a href="#about">Humare Baare Mein</a></li>
-                <li><a href="#contact">Sampark</a></li>
-                <li><a href="#" class="cart-btn">Cart (0)</a></li>
+                <li><a href="#featured">Featured</a></li>
+                <li class="dropdown">
+                    <a href="#">Categories <i class="fas fa-caret-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="#">Soft Toys</a>
+                        <a href="#">Building Blocks</a>
+                        <a href="#">Action Figures</a>
+                        <a href="#">Dolls & Playsets</a>
+                    </div>
+                </li>
+                <li><a href="#">New Arrivals</a></li>
+                <li><a href="#">Deals of the Day</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <section id="hero" class="hero">
-            <div class="hero-content">
-                <h2>Naye Khilonon Ki Khoj Karein!</h2>
-                <p>Har umar ke bachchon ke liye behtareen khilone.</p>
-                <a href="#products" class="shop-now-btn">Abhi Khareedein</a>
+        <section id="hero-slider" class="hero-slider">
+            <div class="slide">
+                <h2>Mega Toy Sale! Upto 50% Off</h2>
+                <p>Limited Time Offer on all popular categories.</p>
+                <a href="#products" class="cta-btn">Shop Now</a>
             </div>
         </section>
 
-        <section id="products" class="products">
-            <h2>Hamare Khilone</h2>
+        <section id="featured" class="product-section">
+            <h2 class="section-title">✨ Featured & Best Sellers</h2>
             <div class="product-grid">
                 <div class="product-card">
+                    <div class="product-badge hot">HOT</div>
                     <img src="toy1.jpg" alt="Soft Toy" class="product-img">
-                    <h3>Pyaara Teddy Bear</h3>
-                    <p class="price">₹ 499</p>
-                    <p class="description">Bahut naram aur gale lagane wala teddy bear.</p>
-                    <button class="add-to-cart" data-id="1">Cart Mein Dalein</button>
+                    <div class="card-details">
+                        <a href="product-detail-1.html" class="product-title">Jumbo Teddy Bear (120cm)</a>
+                        <div class="rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> (4.5)
+                        </div>
+                        <div class="price-info">
+                            <span class="current-price">₹ 1499</span>
+                            <span class="original-price">₹ 2999</span>
+                        </div>
+                        <button class="add-to-cart" data-id="1">Add to Cart</button>
+                        <button class="quick-view-btn"><i class="fas fa-eye"></i> Quick View</button>
+                    </div>
                 </div>
 
                 <div class="product-card">
                     <img src="toy2.jpg" alt="Building Blocks" class="product-img">
-                    <h3>Building Blocks Set</h3>
-                    <p class="price">₹ 799</p>
-                    <p class="description">Rachnatmakta badhane ke liye rang-birange blocks.</p>
-                    <button class="add-to-cart" data-id="2">Cart Mein Dalein</button>
+                    <div class="card-details">
+                        <a href="product-detail-2.html" class="product-title">1000 Pcs City Blocks Set</a>
+                        <div class="rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (4.8)
+                        </div>
+                        <div class="price-info">
+                            <span class="current-price">₹ 999</span>
+                            <span class="original-price">₹ 1999</span>
+                        </div>
+                        <button class="add-to-cart" data-id="2">Add to Cart</button>
+                        <button class="quick-view-btn"><i class="fas fa-eye"></i> Quick View</button>
+                    </div>
                 </div>
-
+                
                 <div class="product-card">
+                    <div class="product-badge sale">-30%</div>
                     <img src="toy3.jpg" alt="Remote Control Car" class="product-img">
-                    <h3>RC Sports Car</h3>
-                    <p class="price">₹ 1299</p>
-                    <p class="description">Tez raftaar aur stylish remote control car.</p>
-                    <button class="add-to-cart" data-id="3">Cart Mein Dalein</button>
+                    <div class="card-details">
+                        <a href="product-detail-3.html" class="product-title">High Speed RC Drift Car</a>
+                        <div class="rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (3.9)
+                        </div>
+                        <div class="price-info">
+                            <span class="current-price">₹ 1299</span>
+                            <span class="original-price">₹ 1850</span>
+                        </div>
+                        <button class="add-to-cart" data-id="3">Add to Cart</button>
+                        <button class="quick-view-btn"><i class="fas fa-eye"></i> Quick View</button>
+                    </div>
                 </div>
 
                 <div class="product-card">
                     <img src="toy4.jpg" alt="Doll Set" class="product-img">
-                    <h3>Fashion Doll Set</h3>
-                    <p class="price">₹ 650</p>
-                    <p class="description">Sundar kapde aur accessories ke saath doll.</p>
-                    <button class="add-to-cart" data-id="4">Cart Mein Dalein</button>
+                    <div class="card-details">
+                        <a href="product-detail-4.html" class="product-title">Princess Doll House Set</a>
+                        <div class="rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (5.0)
+                        </div>
+                        <div class="price-info">
+                            <span class="current-price">₹ 2100</span>
+                            <span class="original-price">₹ 3500</span>
+                        </div>
+                        <button class="add-to-cart" data-id="4">Add to Cart</button>
+                        <button class="quick-view-btn"><i class="fas fa-eye"></i> Quick View</button>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="about" class="about">
-            <h2>Humare Baare Mein</h2>
-            <p>Hum behtareen quality ke khilone pradan karne ke liye pratibaddh hain jo bachchon ke vikas aur khushi ko badhate hain.</p>
+        <section id="banner-ad" class="banner-ad">
+            <h2>🎉 Shop by Age Group: 5-8 Years Fun!</h2>
         </section>
 
-        <section id="contact" class="contact">
-            <h2>Sampark Karein</h2>
-            <p>Email: info@toystore.com | Phone: 123-456-7890</p>
-        </section>
     </main>
 
     <footer>
-        <p>&copy; 2024 Khilonon Ki Duniya. Sabhi Adhikar Surakshit.</p>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h3>About ToyMart</h3>
+                <ul>
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Customer Service</h3>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Returns & Exchanges</a></li>
+                    <li><a href="#">Shipping Info</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                    <li><a href="#">Affiliates</a></li>
+                </ul>
+            </div>
+            <div class="footer-col subscribe">
+                <h3>Stay Connected</h3>
+                <p>Get 10% off your first order!</p>
+                <input type="email" placeholder="Enter your email">
+                <button>Subscribe</button>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 ToyMart. All Rights Reserved. | Designed for a Professional Look</p>
+        </div>
     </footer>
+
+    <div id="quick-view-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Product Quick View</h2>
+            <div class="modal-body">
+                <p>Product details will appear here...</p>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
-      </html>
-      
+    </html>
+    
