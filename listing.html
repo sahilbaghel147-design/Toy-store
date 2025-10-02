@@ -69,101 +69,14 @@
                 <div style="margin-bottom: 15px; text-align: right;">
                     <label for="sort">Sort By:</label>
                     <select id="sort" style="padding: 8px; border-radius: 4px;">
-                        <option>Newest Arrivals</option>
-                        <option>Price: Low to High</option>
-                        <option>Customer Rating</option>
+                        <option value="new">Newest Arrivals</option>
+                        <option value="price_asc">Price: Low to High</option>
+                        <option value="rating_desc">Customer Rating</option>
                     </select>
                 </div>
 
-                <div class="product-grid">
-                    <div class="product-card">
-                        <img src="toy1.jpg" alt="Soft Toy" class="product-img">
-                        <div class="card-details">
-                            <a href="product.html" class="product-title">Jumbo Teddy Bear (120cm)</a>
-                            <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> (4.5)</div>
-                            <span class="current-price">₹ 1499</span>
-                            <span class="original-price">₹ 2999</span>
-                            <button class="add-to-cart" data-id="1">Add to Cart</button>
-                        </div>
+                <div class="product-grid" id="product-list-container">
                     </div>
-
-                    <div class="product-card">
-                        <img src="toy2.jpg" alt="Building Blocks" class="product-img">
-                        <div class="card-details">
-                            <a href="product.html" class="product-title">1000 Pcs City Blocks Set</a>
-                            <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (4.8)</div>
-                            <span class="current-price">₹ 999</span>
-                            <span class="original-price">₹ 1999</span>
-                            <button class="add-to-cart" data-id="2">Add to Cart</button>
-                        </div>
-                    </div>
-                    
-                    <div class="product-card">
-                        <img src="toy3.jpg" alt="Remote Control Car" class="product-img">
-                        <div class="card-details">
-                            <a href="product.html" class="product-title">High Speed RC Drift Car</a>
-                            <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (3.9)</div>
-                            <span class="current-price">₹ 1299</span>
-                            <span class="original-price">₹ 1850</span>
-                            <button class="add-to-cart" data-id="3">Add to Cart</button>
-                        </div>
-                    </div>
-
-                    <div class="product-card">
-                        <img src="toy4.jpg" alt="Doll Set" class="product-img">
-                        <div class="card-details">
-                            <a href="product.html" class="product-title">Princess Doll House Set</a>
-                            <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (5.0)</div>
-                            <span class="current-price">₹ 2100</span>
-                            <span class="original-price">₹ 3500</span>
-                            <button class="add-to-cart" data-id="4">Add to Cart</button>
-                        </div>
-                    </div>
-
-                    <div class="product-card">
-                        <img src="toy1.jpg" alt="Another Toy" class="product-img">
-                        <div class="card-details">
-                            <a href="product.html" class="product-title">Action Figure Super Set</a>
-                            <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (4.2)</div>
-                            <span class="current-price">₹ 850</span>
-                            <span class="original-price">₹ 1200</span>
-                            <button class="add-to-cart" data-id="5">Add to Cart</button>
-                        </div>
-                    </div>
-                    
-                    <div class="product-card">
-                        <img src="toy2.jpg" alt="Another Toy" class="product-img">
-                        <div class="card-details">
-                            <a href="product.html" class="product-title">Educational Puzzle Set</a>
-                            <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> (4.7)</div>
-                            <span class="current-price">₹ 450</span>
-                            <span class="original-price">₹ 600</span>
-                            <button class="add-to-cart" data-id="6">Add to Cart</button>
-                        </div>
-                    </div>
-                    
-                    <div class="product-card">
-                        <img src="toy3.jpg" alt="Another Toy" class="product-img">
-                        <div class="card-details">
-                            <a href="product.html" class="product-title">Toy Kitchen Playset</a>
-                            <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (4.0)</div>
-                            <span class="current-price">₹ 1500</span>
-                            <span class="original-price">₹ 2200</span>
-                            <button class="add-to-cart" data-id="7">Add to Cart</button>
-                        </div>
-                    </div>
-                    
-                    <div class="product-card">
-                        <img src="toy4.jpg" alt="Another Toy" class="product-img">
-                        <div class="card-details">
-                            <a href="product.html" class="product-title">Baby Rattle & Teether Pack</a>
-                            <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> (4.6)</div>
-                            <span class="current-price">₹ 350</span>
-                            <span class="original-price">₹ 500</span>
-                            <button class="add-to-cart" data-id="8">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -179,6 +92,7 @@
         <div class="copyright"><p>&copy; 2025 ToyMart. All Rights Reserved.</p></div>
     </footer>
 
+    <script src="data.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
