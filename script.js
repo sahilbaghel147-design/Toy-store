@@ -1,8 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
-    let cartCount = 0;
-    const cartButton = document.querySelector('.cart-btn');
     
-    // Global function to manage star rating HTML
+    // Function to initialize cart from Local Storage or return an empty array
+    function getCart() {
+        const cartJson = localStorage.getItem('toyMartCart');
+        return cartJson ? JSON.parse(cartJson) : [];
+    }
+
+    // Function to save cart to Local Storage
+    function saveCart(cart) {
+        localStorage.setItem('toyMartCart', JSON.stringify(cart));
+    }
+
+    // --- Global Cart State and Initialization ---
+    let cart = getCart();
+    const cartButton = document.querySelector('.cart-btn');
+
+    // Function to generate Star Rating HTML (copied from previous step)
     function getStarRatingHTML(rating) {
         let stars = '';
         const fullStars = Math.floor(rating);
@@ -20,14 +33,61 @@ document.addEventListener('DOMContentLoaded', () => {
         return stars;
     }
 
-    // --- Cart Functionality (Used across all pages) ---
+    // --- Cart Display and Main Logic ---
+
     function updateCartDisplay() {
-        cartButton.innerHTML = `<i class="fas fa-shopping-cart"></i> Cart (${cartCount})`;
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartButton.innerHTML = `<i class="fas fa-shopping-cart"></i> Cart (${totalItems})`;
+    }
+
+    // Function to handle Add to Cart logic
+    function addToCart(productId) {
+        const product_id = parseInt(productId);
+        const existingItem = cart.find(item => item.id === product_id);
+
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({ id: product_id, quantity: 1 });
+        }
+        
+        saveCart(cart);
+        updateCartDisplay();
     }
     
-    // Add to Cart Listeners ko initialize/re-initialize karta hai
+    // Function to remove an item from cart
+    function removeFromCart(productId) {
+        const product_id = parseInt(productId);
+        cart = cart.filter(item => item.id !== product_id);
+        saveCart(cart);
+        updateCartDisplay();
+        renderCartPage(); // Agar cart page par hain to dobara render karein
+    }
+    
+    // Function to update item quantity
+    function updateQuantity(productId, newQuantity) {
+        const product_id = parseInt(productId);
+        const item = cart.find(item => item.id === product_id);
+        
+        const quantity = parseInt(newQuantity);
+        
+        if (item && quantity > 0 && quantity < 100) {
+            item.quantity = quantity;
+        } else if (item && quantity <= 0) {
+            removeFromCart(productId);
+            return;
+        }
+        
+        saveCart(cart);
+        updateCartDisplay();
+        if (document.getElementById('cart-content-area')) {
+            renderCartPage(); // Cart totals ko update karein
+        }
+    }
+
+
+    // Add to Cart Listeners (Ab yeh naye 'addToCart' function ko call karega)
     function initializeCartListeners() {
-        // Purane listeners hatane ke liye
         document.querySelectorAll('.add-to-cart, .add-to-cart-lg').forEach(button => {
             button.replaceWith(button.cloneNode(true));
         });
@@ -35,10 +95,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.add-to-cart, .add-to-cart-lg').forEach(button => {
             button.addEventListener('click', () => {
                 if (button.disabled) return;
-
-                cartCount++;
-                updateCartDisplay();
                 
+                const productId = button.getAttribute('data-id');
+                addToCart(productId);
+
+                // Visual confirmation
                 const originalText = button.textContent;
                 button.textContent = 'Added!';
                 setTimeout(() => {
@@ -50,7 +111,139 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Product Card Rendering Logic ---
+    // --- NEW: Cart Page Rendering ---
+    function renderCartPage() {
+        const cartArea = document.getElementById('cart-content-area');
+        if (!cartArea) return;
+
+        if (cart.length === 0) {
+            cartArea.innerHTML = `
+                <div class="empty-cart-message">
+                    <h3>Your cart is empty!</h3>
+                    <p>It looks like you haven't added any toys yet.</p>
+                    <a href="listing.html">Start Shopping Now</a>
+                </div>
+            `;
+            return;
+        }
+
+        let totalSubtotal = 0;
+        let itemsHtml = '';
+
+        cart.forEach(cartItem => {
+            const product = window.toyProducts.find(p => p.id === cartItem.id);
+            if (!product) return; // Agar product data mein nahi mila
+
+            const itemTotal = product.price * cartItem.quantity;
+            totalSubtotal += itemTotal;
+            
+            itemsHtml += `
+                <div class="cart-item" data-id="${product.id}">
+                    <div class="item-image">
+                        <img src="${product.image.split(',')[0]}" alt="${product.title}">
+                    </div>
+                    <div class="item-details">
+                        <h4><a href="product.html?id=${product.id}">${product.title}</a></h4>
+                        <div class="item-quantity">
+                            <label for="qty-${product.id}">Qty:</label>
+                            <input type="number" id="qty-${product.id}" class="quantity-input" value="${cartItem.quantity}" min="1" max="99" data-id="${product.id}">
+                        </div>
+                        <span class="remove-btn" data-id="${product.id}"><i class="fas fa-trash"></i> Remove</span>
+                    </div>
+                    <div class="item-price">
+                        ₹ ${itemTotal.toLocaleString('en-IN')}
+                    </div>
+                </div>
+            `;
+        });
+        
+        // --- Summary Calculation ---
+        const shipping = totalSubtotal < 1000 ? 100 : 0;
+        const totalPayable = totalSubtotal + shipping;
+
+        const summaryHtml = `
+            <div class="cart-items-section">
+                <h3>Items (${cart.length})</h3>
+                <div id="cart-items-list">
+                    ${itemsHtml}
+                </div>
+            </div>
+            <div class="cart-summary">
+                <h3>Order Summary</h3>
+                <div class="summary-row"><span>Subtotal:</span><span>₹ ${totalSubtotal.toLocaleString('en-IN')}</span></div>
+                <div class="summary-row"><span>Shipping:</span><span>${shipping > 0 ? `₹ ${shipping}` : 'FREE'}</span></div>
+                <div class="summary-row" style="font-size: 1.3em; font-weight: bold; border-top: 1px solid #ccc; padding-top: 10px; margin-top: 10px;">
+                    <span>Total:</span><span>₹ ${totalPayable.toLocaleString('en-IN')}</span>
+                </div>
+                <button class="checkout-btn">Proceed to Checkout</button>
+            </div>
+        `;
+
+        cartArea.innerHTML = summaryHtml;
+        
+        // --- Attach Cart Page Event Listeners ---
+        document.querySelectorAll('.remove-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                removeFromCart(e.currentTarget.getAttribute('data-id'));
+            });
+        });
+        
+        document.querySelectorAll('.quantity-input').forEach(input => {
+            input.addEventListener('change', (e) => {
+                updateQuantity(e.target.getAttribute('data-id'), e.target.value);
+            });
+        });
+        
+        document.querySelector('.checkout-btn').addEventListener('click', () => {
+             alert("Thank you for your order! Checkout functionality is under development.");
+        });
+
+    }
+    
+    // --- Listing/Search/Detail Logic (Copied from previous step) ---
+    
+    function filterAndRenderProducts() {
+        if (!window.toyProducts) return; 
+
+        let filteredProducts = [...toyProducts]; 
+
+        // 1. **SEARCH Filter**
+        const searchTerm = document.getElementById('search-input-listing')?.value.toLowerCase();
+        if (searchTerm) {
+            filteredProducts = filteredProducts.filter(product => 
+                product.title.toLowerCase().includes(searchTerm) || 
+                product.description.toLowerCase().includes(searchTerm) ||
+                product.category.toLowerCase().includes(searchTerm)
+            );
+        }
+
+        // 2. **AGE & PRICE Filters**
+        const checkedAges = Array.from(document.querySelectorAll('.filter-group input[type="checkbox"]'))
+            .filter(checkbox => checkbox.checked && checkbox.parentElement.parentElement.querySelector('h4').textContent.includes('Age'))
+            .map(checkbox => checkbox.parentElement.textContent.trim());
+        
+        if (checkedAges.length > 0) {
+            filteredProducts = filteredProducts.filter(product => checkedAges.includes(product.age));
+        }
+
+        // 3. **SORTING**
+        const sortBy = document.getElementById('sort')?.value;
+
+        filteredProducts.sort((a, b) => {
+            switch (sortBy) {
+                case 'price_asc':
+                    return a.price - b.price; 
+                case 'rating_desc':
+                    return b.rating - a.rating; 
+                case 'new':
+                default:
+                    return b.id - a.id;
+            }
+        });
+
+        renderProductCards(filteredProducts);
+    }
+    
     function renderProductCards(products) {
         const container = document.getElementById('product-list-container');
         if (!container) return; 
@@ -89,76 +282,21 @@ document.addEventListener('DOMContentLoaded', () => {
             container.innerHTML += cardHTML;
         });
         
-        initializeCartListeners(); // Naye cards ke liye listeners lagayein
-    }
-
-    // --- NEW: Search, Filter, and Sort Master Function ---
-    function filterAndRenderProducts() {
-        if (!window.toyProducts) return; // Make sure data is loaded
-
-        let filteredProducts = [...toyProducts]; // Ek copy banaein data ki
-
-        // 1. **SEARCH Filter**
-        const searchTerm = document.getElementById('search-input-listing')?.value.toLowerCase();
-        if (searchTerm) {
-            filteredProducts = filteredProducts.filter(product => 
-                product.title.toLowerCase().includes(searchTerm) || 
-                product.description.toLowerCase().includes(searchTerm) ||
-                product.category.toLowerCase().includes(searchTerm)
-            );
-        }
-
-        // 2. **AGE & PRICE Filters** (Basic checkbox logic)
-        const checkedAges = Array.from(document.querySelectorAll('.filter-group input[type="checkbox"]'))
-            .filter(checkbox => checkbox.checked && checkbox.parentElement.parentElement.querySelector('h4').textContent.includes('Age'))
-            .map(checkbox => checkbox.parentElement.textContent.trim());
-        
-        // Agar koi age filter selected hai toh products ko filter karein
-        if (checkedAges.length > 0) {
-            filteredProducts = filteredProducts.filter(product => checkedAges.includes(product.age));
-        }
-        
-        // **********************************************
-        // NOTE: Aap yahan Price, Brand, aur anya filters jodd sakte hain.
-        // **********************************************
-
-
-        // 3. **SORTING**
-        const sortBy = document.getElementById('sort')?.value;
-
-        filteredProducts.sort((a, b) => {
-            switch (sortBy) {
-                case 'price_asc':
-                    return a.price - b.price; // Low to High
-                case 'rating_desc':
-                    return b.rating - a.rating; // High to Low
-                case 'new':
-                default:
-                    return b.id - a.id; // Naye products pehle
-            }
-        });
-
-        // 4. Render the final list
-        renderProductCards(filteredProducts);
+        initializeCartListeners(); 
     }
     
-    // --- Product Detail Page Logic (from previous step) ---
     function renderProductDetails() {
         if (!document.querySelector('.product-detail')) return;
         
         const urlParams = new URLSearchParams(window.location.search);
         const productId = parseInt(urlParams.get('id')) || 1; 
 
-        // NOTE: toyProducts variable data.js se aayega
         const product = window.toyProducts.find(p => p.id === productId);
 
         if (product) {
             document.title = `${product.title} - Product Details | ToyMart`;
             document.querySelector('.detail-info h2').textContent = product.title;
             
-            // ... (baki detail page update logic) ...
-            
-            // Ye wala code product.html mein bhi update karna hoga
             document.querySelector('.detail-price').innerHTML = 
                 `₹ ${product.price} <span class="price-small"> (M.R.P.: ₹ ${product.mrp})</span>`;
             document.querySelector('.detail-info .rating').innerHTML = 
@@ -197,30 +335,30 @@ document.addEventListener('DOMContentLoaded', () => {
         // Listing Page Setup
         filterAndRenderProducts(); 
 
-        // Attach event listeners for filtering
         const sidebar = document.querySelector('.sidebar');
         const sortDropdown = document.getElementById('sort');
 
-        // Sidebar filters aur Apply button par listener
         sidebar.addEventListener('change', filterAndRenderProducts);
         sidebar.querySelector('.add-to-cart').addEventListener('click', (e) => {
             e.preventDefault();
             filterAndRenderProducts();
         });
         
-        // Sorting dropdown par listener
         sortDropdown.addEventListener('change', filterAndRenderProducts);
         
-        // Search bar (Global Header ka search bar) par listener
         const globalSearchInput = document.querySelector('.search-bar input');
-        globalSearchInput.setAttribute('id', 'search-input-listing'); // ID assign karein
+        globalSearchInput.setAttribute('id', 'search-input-listing'); 
         globalSearchInput.addEventListener('keyup', filterAndRenderProducts);
         document.querySelector('.search-bar button').addEventListener('click', filterAndRenderProducts);
 
     } else if (document.querySelector('.product-detail')) {
         renderProductDetails();
+    } else if (document.getElementById('cart-content-area')) {
+        // Cart Page Setup
+        renderCartPage();
     } else {
         // Index page par cart listeners
         initializeCartListeners();
     }
 });
+                
