@@ -1,4 +1,4 @@
-// Yeh hamara Dummy Database hai. Asli website mein yeh data server se aata hai.
+// Yeh hamara Dummy Database hai.
 const toyProducts = [
     {
         id: 1,
@@ -46,11 +46,10 @@ const toyProducts = [
         mrp: 3500,
         rating: 5.0,
         reviews: 80,
-        image: "toy4.jpg, toy4b.jpg", // Multiple images ka example
+        image: "toy4.jpg", 
         category: "Dolls & Playsets",
         age: "3-5 Years",
         description: "A large, beautifully decorated doll house complete with furniture and a family of dolls. Hours of imaginative play.",
-        stock: false // Out of stock example
+        stock: false 
     },
-    // Aap yahan aur products jodd sakte hain...
 ];
